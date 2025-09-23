@@ -27,8 +27,10 @@ class StudentMemLocalDataSource {
     }
 
     fun delete(exp: String) {
-        if (dataSource.containsKey(exp)) {
-            dataSource.remove(exp)
-        }
+        dataSource.remove(exp)
+    }
+
+    fun allStudents(): List<Student> {
+        return dataSource.values.toList()
     }
 }

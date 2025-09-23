@@ -26,4 +26,8 @@ class StudentDataRepository(
     override fun delete(exp: String) {
         memLocalDataSource.delete(exp)
     }
+
+    override fun allStudents(): List<Student> {
+        return memLocalDataSource.allStudents()
+    }
 }

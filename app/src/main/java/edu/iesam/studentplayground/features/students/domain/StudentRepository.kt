@@ -10,4 +10,6 @@ interface StudentRepository {
 
     fun delete(exp: String)
 
+    fun allStudents(): List<Student>
+
 }

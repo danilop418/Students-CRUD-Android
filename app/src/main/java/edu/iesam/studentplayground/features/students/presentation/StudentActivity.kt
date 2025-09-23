@@ -11,6 +11,8 @@ import edu.iesam.studentplayground.features.students.data.remote.StudentApiRemot
 import edu.iesam.studentplayground.features.students.data.remote.StudentDataRepository
 import edu.iesam.studentplayground.features.students.data.local.StudentMemLocalDataSource
 import edu.iesam.studentplayground.features.students.data.local.StudentXmlLocalDataSource
+import edu.iesam.studentplayground.features.students.domain.AllStudentUseCase
+import edu.iesam.studentplayground.features.students.domain.DeleteStudentUseCase
 import edu.iesam.studentplayground.features.students.domain.FetchStudentUseCase
 import edu.iesam.studentplayground.features.students.domain.SaveStudentUseCase
 import edu.iesam.studentplayground.features.students.domain.UpdateStudentUseCase
@@ -37,8 +39,10 @@ class StudentActivity : AppCompatActivity() {
         val useCase = SaveStudentUseCase(dataRepository)
         val fetchStudentUseCase = FetchStudentUseCase(dataRepository)
         val updateStudentUseCase = UpdateStudentUseCase(dataRepository)
+        val allStudentUseCase = AllStudentUseCase(dataRepository)
+        val deleteStudentUseCase = DeleteStudentUseCase(dataRepository)
 
-        val viewModel = StudentViewModel(useCase, fetchStudentUseCase, updateStudentUseCase)
+        val viewModel = StudentViewModel(useCase, fetchStudentUseCase, updateStudentUseCase, deleteStudentUseCase,allStudentUseCase )
         //Create
         viewModel.saveClicked("0001", "nombre1 apellido1 apellido1")
         Log.d("@dev", "Stop")
@@ -46,19 +50,21 @@ class StudentActivity : AppCompatActivity() {
         viewModel.saveClicked("0002", "nombre2 apellido2 apellido2")
         Log.d("@dev", "Stop")
         //Search
-        val student = viewModel.searchStudent("001")
-        val studentSecond = viewModel.searchStudent("002")
+        val student = viewModel.searchStudent("0001")
+        val studentSecond = viewModel.searchStudent("0002")
         //Update
         if (student != null) {
             viewModel.updateStudent("Dani", student)
         } else {
-            print("Estudiante no encontrado")
+            Log.d("@dev", "Estudiante no es encontrado")
         }
         //Delete
         if (studentSecond != null) {
             viewModel.deleteStudent(studentSecond.exp)
         } else {
-            print("Estudiante no encontrado")
+            Log.d("@dev", "Estudiante no es encontrado")
         }
+        //Show
+        viewModel.allStudents()
     }
 }
