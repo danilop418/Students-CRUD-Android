@@ -32,6 +32,6 @@ class StudentViewModel(
     }
 
     fun allStudents(): List<Student> {
-        return allStudentUseCase.allStudents()
+        return allStudentUseCase.allStudent()
     }
 }

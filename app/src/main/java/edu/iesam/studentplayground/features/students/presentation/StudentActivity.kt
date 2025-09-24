@@ -42,7 +42,13 @@ class StudentActivity : AppCompatActivity() {
         val allStudentUseCase = AllStudentUseCase(dataRepository)
         val deleteStudentUseCase = DeleteStudentUseCase(dataRepository)
 
-        val viewModel = StudentViewModel(useCase, fetchStudentUseCase, updateStudentUseCase, deleteStudentUseCase,allStudentUseCase )
+        val viewModel = StudentViewModel(
+            useCase,
+            fetchStudentUseCase,
+            updateStudentUseCase,
+            deleteStudentUseCase,
+            allStudentUseCase
+        )
         //Create
         viewModel.saveClicked("0001", "nombre1 apellido1 apellido1")
         Log.d("@dev", "Stop")
