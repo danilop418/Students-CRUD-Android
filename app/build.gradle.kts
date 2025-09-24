@@ -45,7 +45,6 @@ dependencies {
 
     //Unit test
     testImplementation(libs.junit)
-    testImplementation(libs.junit.junit)
     testImplementation(libs.mockk)
 
     //Android Test
