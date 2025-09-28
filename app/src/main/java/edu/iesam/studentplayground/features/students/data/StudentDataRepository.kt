@@ -1,7 +1,8 @@
-package edu.iesam.studentplayground.features.students.data.remote
+package edu.iesam.studentplayground.features.students.data
 
 import edu.iesam.studentplayground.features.students.data.local.StudentMemLocalDataSource
 import edu.iesam.studentplayground.features.students.data.local.StudentXmlLocalDataSource
+import edu.iesam.studentplayground.features.students.data.remote.StudentApiRemoteDataSource
 import edu.iesam.studentplayground.features.students.domain.Student
 import edu.iesam.studentplayground.features.students.domain.StudentRepository
 
@@ -27,7 +28,7 @@ class StudentDataRepository(
         memLocalDataSource.delete(exp)
     }
 
-    override fun allStudents(): List<Student> {
+    override fun fetch(): List<Student> {
         return memLocalDataSource.allStudents()
     }
 }
