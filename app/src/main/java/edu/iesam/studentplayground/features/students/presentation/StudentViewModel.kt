@@ -1,26 +1,26 @@
 package edu.iesam.studentplayground.features.students.presentation
 
 import androidx.lifecycle.ViewModel
-import edu.iesam.studentplayground.features.students.domain.AllStudentUseCase
+import edu.iesam.studentplayground.features.students.domain.FetchStudentsUseCase
 import edu.iesam.studentplayground.features.students.domain.DeleteStudentUseCase
-import edu.iesam.studentplayground.features.students.domain.FetchStudentUseCase
+import edu.iesam.studentplayground.features.students.domain.SearchStudentUseCase
 import edu.iesam.studentplayground.features.students.domain.SaveStudentUseCase
 import edu.iesam.studentplayground.features.students.domain.Student
 import edu.iesam.studentplayground.features.students.domain.UpdateStudentUseCase
 
 class StudentViewModel(
     private val saveStudentUseCase: SaveStudentUseCase,
-    private val fetchStudentUseCase: FetchStudentUseCase,
+    private val searchStudentsUseCase: SearchStudentUseCase,
     private val updateStudentUseCase: UpdateStudentUseCase,
     private val deleteStudentUseCase: DeleteStudentUseCase,
-    private val allStudentUseCase : AllStudentUseCase
+    private val fetchStudentUseCase: FetchStudentsUseCase
 ) : ViewModel() {
     fun saveClicked(exp: String, name: String) {
         saveStudentUseCase.save(Student(exp, name))
     }
 
     fun searchStudent(exp: String): Student? {
-        return fetchStudentUseCase.fecth(exp)
+        return searchStudentsUseCase.search(exp)
     }
 
     fun updateStudent(name: String, student: Student): Student? {
@@ -31,7 +31,7 @@ class StudentViewModel(
         deleteStudentUseCase.delete(exp)
     }
 
-    fun allStudents(): List<Student> {
-        return allStudentUseCase.allStudent()
+    fun fetch(): List<Student> {
+        return fetchStudentUseCase.fetch()
     }
 }
