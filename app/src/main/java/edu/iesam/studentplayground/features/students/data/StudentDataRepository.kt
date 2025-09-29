@@ -29,6 +29,11 @@ class StudentDataRepository(
     }
 
     override fun fetch(): List<Student> {
-        return memLocalDataSource.allStudents()
+        return memLocalDataSource.fetcStudents()
     }
+
+    override fun exist(exp:String):Boolean {
+        return memLocalDataSource.exist(exp)
+    }
+
 }

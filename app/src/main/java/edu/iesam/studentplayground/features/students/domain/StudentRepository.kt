@@ -12,4 +12,6 @@ interface StudentRepository {
 
     fun fetch(): List<Student>
 
+    fun exist(exp:String):Boolean
+
 }

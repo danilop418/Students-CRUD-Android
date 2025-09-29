@@ -28,7 +28,14 @@ class StudentMemLocalDataSource {
         dataSource.remove(exp)
     }
 
-    fun allStudents(): List<Student> {
-        return dataSource.values.toList()
+    fun fetcStudents(): List<Student> {
+        return dataSource.map { it ->
+            it.value
+        }
     }
+
+    fun exist(exp: String): Boolean {
+        return dataSource.containsKey(exp)
+    }
+
 }
