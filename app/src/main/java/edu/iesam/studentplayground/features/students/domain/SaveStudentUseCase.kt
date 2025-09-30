@@ -1,21 +1,23 @@
 package edu.iesam.studentplayground.features.students.domain
 
-import edu.iesam.studentplayground.features.students.domain.exception.StudentAlreadyExistException
+import edu.iesam.studentplayground.features.students.domain.errors.ErrorApp
 
 class SaveStudentUseCase(
-    val studentRepository: StudentRepository,
-    val existStudentUseCase: ExistStudentUseCase) {
-    fun save(student: Student) {
-        if (student.exp.isEmpty() || student.exp.isBlank()) {
-            throw IllegalArgumentException("The expedient cannot is empty")
+    private val studentRepository: StudentRepository,
+    private val existStudentUseCase: ExistStudentUseCase
+) {
+    operator fun invoke(student: Student): Result<Unit> {
+        if (student.exp.isBlank()) {
+            return Result.failure(ErrorApp.EmptyExpedient)
         }
-        if (student.name.isEmpty() || student.name.isBlank()) {
-            throw IllegalArgumentException("The name cannot is empty")
+        if (student.name.isBlank()) {
+            return Result.failure(ErrorApp.EmptyName)
         }
         if (existStudentUseCase.exist(student.exp)) {
-            throw StudentAlreadyExistException("The id of Student already exist")
+            return Result.failure(ErrorApp.StudentAlreadyExists)
         }
-        studentRepository.save(student)
-    }
 
+        studentRepository.save(student)
+        return Result.success(Unit)
+    }
 }
