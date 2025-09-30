@@ -4,5 +4,4 @@ sealed class ErrorApp : Throwable() {
     object EmptyExpedient : ErrorApp()
     object EmptyName : ErrorApp()
     object StudentAlreadyExists : ErrorApp()
-    //luego lo borro
 }
