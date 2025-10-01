@@ -2,6 +2,7 @@ package edu.iesam.studentplayground.features.students.presentation
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,9 +14,11 @@ import edu.iesam.studentplayground.features.students.data.local.StudentMemLocalD
 import edu.iesam.studentplayground.features.students.data.local.StudentXmlLocalDataSource
 import edu.iesam.studentplayground.features.students.domain.FetchStudentsUseCase
 import edu.iesam.studentplayground.features.students.domain.DeleteStudentUseCase
+import edu.iesam.studentplayground.features.students.domain.ExistStudentUseCase
 import edu.iesam.studentplayground.features.students.domain.SearchStudentUseCase
 import edu.iesam.studentplayground.features.students.domain.SaveStudentUseCase
 import edu.iesam.studentplayground.features.students.domain.UpdateStudentUseCase
+import edu.iesam.studentplayground.features.students.domain.errors.ErrorApp
 
 class StudentActivity : AppCompatActivity() {
 
@@ -35,8 +38,11 @@ class StudentActivity : AppCompatActivity() {
         val xml = StudentXmlLocalDataSource()
         val mem = StudentMemLocalDataSource()
         val api = StudentApiRemoteDataSource()
+
         val dataRepository = StudentDataRepository(xml, mem, api)
-        val useCase = SaveStudentUseCase(dataRepository)
+
+        val existStudentUseCase = ExistStudentUseCase(dataRepository)
+        val useCase = SaveStudentUseCase(dataRepository, existStudentUseCase)
         val searchStudentUseCase = SearchStudentUseCase(dataRepository)
         val updateStudentUseCase = UpdateStudentUseCase(dataRepository)
         val fetchStudentUseCase = FetchStudentsUseCase(dataRepository)
@@ -50,27 +56,78 @@ class StudentActivity : AppCompatActivity() {
             fetchStudentUseCase
         )
         //Create
-        viewModel.saveClicked("0001", "nombre1 apellido1 apellido1")
-        Log.d("@dev", "Stop")
-
-        viewModel.saveClicked("0002", "nombre2 apellido2 apellido2")
-        Log.d("@dev", "Stop")
+        val student1 = viewModel.saveClicked("0001", "nombre1 apellido1 apellido1")
+        student1.fold(
+            onSuccess = {
+                Log.d("@dev", "The Student saved correctly")
+                toast("Student create")
+            },
+            onFailure = { error ->
+                handleError(error as ErrorApp)
+            }
+        )
+        val student2 = viewModel.saveClicked("0002", "nombre2 apellido2 apellido2")
+        student2.fold(
+            onSuccess = {
+                Log.d("@dev", "The Student saved correctly")
+                toast("Student create")
+            },
+            onFailure = { error ->
+                handleError(error as ErrorApp)
+            }
+        )
         //Search
-        val student = viewModel.searchStudent("0001")
-        val studentSecond = viewModel.searchStudent("0002")
+        val searchStudent1 = viewModel.searchStudent("0001")
+        val searchStudent2 = viewModel.searchStudent("0002")
+
+        searchStudent1.fold(
+            onSuccess = { student ->
+                Log.d("@dev","The Student found ${student.name}")
+            },
+            onFailure = { error ->
+                handleError(error as ErrorApp)
+            }
+        )
+
+        searchStudent2.fold(
+            onSuccess = { student ->
+                Log.d("@dev","The Student found ${student.name}")
+            },
+            onFailure = { error ->
+                handleError(error as ErrorApp)
+            }
+        )
+
         //Update
-        if (student != null) {
-            viewModel.updateStudent("Dani", student)
-        } else {
-            Log.d("@dev", "Estudiante no es encontrado")
-        }
+        // I will fix this tomorrow
+
         //Delete
-        if (studentSecond != null) {
-            viewModel.deleteStudent(studentSecond.exp)
-        } else {
-            Log.d("@dev", "Estudiante no es encontrado")
-        }
+        //I will fix this tomorrow
+
         //Show
-        viewModel.fetch()
+        //I will fix this tomorrow
+    }
+
+    private fun handleError(error: ErrorApp) {
+        when (error) {
+            is ErrorApp.EmptyExpedient -> {
+                Log.e("@dev", "Error: The expedient is empty")
+                toast("The expedient cannot be empty")
+            }
+
+            is ErrorApp.EmptyName -> {
+                Log.e("@dev", "Error: The name is empty")
+                toast("The name cannot be empty")
+            }
+
+            is ErrorApp.StudentAlreadyExists -> {
+                Log.e("@dev", "Error: The studient already exist")
+                toast("The expedient already exist")
+            }
+        }
+    }
+
+    private fun toast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
