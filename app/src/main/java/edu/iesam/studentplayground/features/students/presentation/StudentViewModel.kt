@@ -15,23 +15,24 @@ class StudentViewModel(
     private val deleteStudentUseCase: DeleteStudentUseCase,
     private val fetchStudentUseCase: FetchStudentsUseCase
 ) : ViewModel() {
-    fun saveClicked(exp: String, name: String) {
-        saveStudentUseCase.save(Student(exp, name))
+    fun saveClicked(exp: String, name: String): Result<Unit> {
+        val student = Student(exp, name)
+        return saveStudentUseCase(student)
     }
 
-    fun searchStudent(exp: String): Student? {
+    fun searchStudent(exp: String): Result<Student> {
         return searchStudentsUseCase.search(exp)
     }
 
-    fun updateStudent(name: String, student: Student): Student? {
+    fun updateStudent(name: String, student: Student): Result<Student> {
         return updateStudentUseCase.update(name, student)
     }
 
-    fun deleteStudent(exp: String) {
-        deleteStudentUseCase.delete(exp)
+    fun deleteStudent(exp: String): Result<Unit> {
+        return deleteStudentUseCase.delete(exp)
     }
 
-    fun fetch(): List<Student> {
+    fun fetch(): Result<List<Student>> {
         return fetchStudentUseCase.fetch()
     }
 }
