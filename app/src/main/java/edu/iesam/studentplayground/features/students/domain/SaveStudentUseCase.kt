@@ -7,10 +7,10 @@ class SaveStudentUseCase(
     private val existStudentUseCase: ExistStudentUseCase
 ) {
     operator fun invoke(student: Student): Result<Unit> {
-        if (student.exp.isBlank()) {
+        if (student.exp.isEmpty()) {
             return Result.failure(ErrorApp.EmptyExpedient)
         }
-        if (student.name.isBlank()) {
+        if (student.name.isEmpty()) {
             return Result.failure(ErrorApp.EmptyName)
         }
         if (existStudentUseCase.exist(student.exp)) {

@@ -20,19 +20,19 @@ class StudentViewModel(
         return saveStudentUseCase(student)
     }
 
-    fun searchStudent(exp: String): Result<Student> {
+    fun searchStudent(exp: String): Student {
         return searchStudentsUseCase.search(exp)
     }
 
-    fun updateStudent(name: String, student: Student): Result<Student> {
+    fun updateStudent(name: String, student: Student): Student {
         return updateStudentUseCase.update(name, student)
     }
 
-    fun deleteStudent(exp: String): Result<Unit> {
+    fun deleteStudent(exp: String) {
         return deleteStudentUseCase.delete(exp)
     }
 
-    fun fetch(): Result<List<Student>> {
+    fun fetch(): List<Student> {
         return fetchStudentUseCase.fetch()
     }
 }
